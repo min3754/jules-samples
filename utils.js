@@ -22,3 +22,42 @@ function parseQueryString(queryString) {
 
   return params;
 }
+
+function parseHeaders(headerString) {
+  if (headerString == null || headerString.trim() === "") {
+    return {};
+  }
+
+  const headers = {};
+  const lines = headerString.split('\n');
+
+  for (const line of lines) {
+    const colonIndex = line.indexOf(':');
+
+    if (colonIndex === -1) {
+      // Ignore lines without a colon
+      continue;
+    }
+
+    const key = line.substring(0, colonIndex).trim().toLowerCase();
+    const value = line.substring(colonIndex + 1).trim();
+
+    if (key === "") {
+        // Ignore lines with empty key
+        continue;
+    }
+
+    if (headers[key]) {
+      headers[key].push(value);
+    } else {
+      headers[key] = [value];
+    }
+  }
+
+  return headers;
+}
+
+module.exports = {
+  parseQueryString,
+  parseHeaders
+};
